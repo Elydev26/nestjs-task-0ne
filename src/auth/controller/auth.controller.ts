@@ -7,16 +7,16 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { AuthService } from '../auth-service/auth.service';
+import { AuthService } from '../service/auth.service';
 import { LoginDto } from '../dto/create-auth.dto';
-import { JwtAuthGuard } from '../auth-guard/jwt.auth.guard';
-import { ObjectValidationPipe } from 'src/util/object-vilidator/object-validator.pipe';
-import { authSchema } from '../model/auth.model';
+import { ObjectValidationPipe } from 'src/util/pipe/object.validator.pipe';
+import { authSchema } from '../validation/auth.validator';
+import { JwtAuthGuard } from '../guard/jwt.auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
+  @UseGuards(JwtAuthGuard)
   @Post('login')
   @UsePipes(new ObjectValidationPipe(authSchema))
   async login(@Body() loginDto: LoginDto) {
@@ -25,7 +25,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('user')
-  getBook(@Request() req: any) {
+  getUser(@Request() req: any) {
     return req.user;
   }
 }

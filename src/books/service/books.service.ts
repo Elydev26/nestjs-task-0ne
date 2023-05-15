@@ -3,14 +3,21 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Book } from '../model/create-book.model';
 import { CreateBookDto } from '../dto/create-book.dto';
-import * as bcrypt from 'bcrypt';
+import { AwsService } from '../../util/Aws/aws.service';
 
 @Injectable()
 export class BooksService {
-  constructor(@InjectModel(Book.name) private bookModel: Model<Book>) {}
+  constructor(
+    @InjectModel(Book.name) private bookModel: Model<Book>,
+    private readonly awsService: AwsService,
+  ) {}
 
-  async create(createBookDto: CreateBookDto): Promise<Book> {
-    const createdBook = new this.bookModel(createBookDto);
+  async create(
+    createBookDto: CreateBookDto,
+    file: Express.Multer.File,
+  ): Promise<Book> {
+    const fileUrl = await this.awsService.uploadFile(file);
+    const createdBook = new this.bookModel({ ...createBookDto, fileUrl });
     return createdBook.save();
   }
 
@@ -20,6 +27,12 @@ export class BooksService {
 
   async findById(id: string): Promise<Book> {
     return this.bookModel.findById(id).exec();
+  }
+
+  async getFile(id: string): Promise<{ filename: string; fileUrl: string }> {
+    const book = await this.findById(id);
+    const fileUrl = await this.awsService.getFileUrl(book.fileKey);
+    return { filename: book.fileKey, fileUrl };
   }
 
   async updateById(id: string, updateBookDto: CreateBookDto): Promise<Book> {
@@ -43,7 +56,6 @@ export class BooksService {
 // import { InjectModel } from '@nestjs/mongoose';
 // import { Model } from 'mongoose';
 // import { Book } from './book.model';
-
 // @Injectable()
 // export class BooksService {
 //     constructor(@InjectModel(Book.name) private bookModel: Model<Book>) { }

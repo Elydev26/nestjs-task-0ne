@@ -1,14 +1,16 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
-import { UsersService } from '../user-service/user.service';
+import { Body, Controller, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { UsersService } from '../service/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { ObjectValidationPipe } from 'src/util/object-vilidator/object-validator.pipe';
-import { userSchema } from '../model/create-userschema.model';
+import { ObjectValidationPipe } from 'src/util/pipe/object.validator.pipe';
+import { userSchema } from '../validation/user.validator';
+import { CreateUserGuard } from '../guard/user.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('signUp')
+  @UseGuards(CreateUserGuard)
   @UsePipes(new ObjectValidationPipe(userSchema))
   async create(@Body() user: CreateUserDto): Promise<CreateUserDto> {
     const newUser = await this.usersService.create(user);

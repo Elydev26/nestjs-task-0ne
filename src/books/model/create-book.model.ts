@@ -1,18 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
-export enum BooksCategory {
-    TECH = 'tech',
-    MOTIVATIONAL = 'motivational',
-    SCIENCE = 'science',
-    FINANCE = 'finance',
-    STORY = 'story',
-
-}
+import { BooksCategoryEnum } from '../enum/book.enum';
 
 @Schema()
 export class Book extends Document {
+    
     @Prop()
     title: string;
 
@@ -26,7 +19,7 @@ export class Book extends Document {
     publishedYear: number;
 
     @Prop()
-    Url?: string
+    fileUrl: string;
 
     @Prop()
     isbn: number;
@@ -34,7 +27,14 @@ export class Book extends Document {
     @Prop()
     coverImage: string;
 
-    @Prop({ enum: BooksCategory, default:BooksCategory})
+    @Prop()
+    fileKey: string;
+
+    @Prop()
+    file: string;
+    
+    @Prop({ type: String, enum: Object.values(BooksCategoryEnum), default: BooksCategoryEnum.TECH})
+    designation: BooksCategoryEnum
 
     @Prop({ type: Date, default: Date.now() })
     createdAt: Date;

@@ -2,12 +2,9 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { UserRoleEnum } from '../enum/user.enum';
 
-export enum UserRole {
-  ADMIN = 'admin',
-  MODERATOR = 'moderator',
-  USER = 'user',
-}
+
 
 @Schema()
 export class User extends Document {
@@ -27,10 +24,10 @@ export class User extends Document {
   lastName: string;
 
   @Prop()
-  bio?: string;
+  bio: string;
 
-  @Prop({ enum: UserRole, default: UserRole.USER})
-  designation: UserRole;
+  @Prop({ type: String, enum: Object.values(UserRoleEnum), default: UserRoleEnum.USER})
+  designation: UserRoleEnum;
 
   @Prop({type:Date, default: Date.now()})
   createdAt: Date;

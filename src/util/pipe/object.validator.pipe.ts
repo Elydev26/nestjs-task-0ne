@@ -8,7 +8,7 @@ import { ObjectSchema } from 'joi';
 
 @Injectable()
 export class ObjectValidationPipe implements PipeTransform {
-  constructor(private schema: ObjectSchema) {}
+  constructor(private readonly schema: ObjectSchema) {}
 
   async transform(data: any): Promise<void> {
     try {

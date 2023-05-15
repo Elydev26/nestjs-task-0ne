@@ -6,4 +6,5 @@ export const userSchema = Joi.object({
   password: Joi.string().required(),
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
+  designation: Joi.string().required()
 });

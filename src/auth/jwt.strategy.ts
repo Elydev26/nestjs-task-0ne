@@ -2,8 +2,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt'
-import { UsersService } from '../user/user-service/user.service';
-import { User } from 'src/user/model/create-user.model';
+import { UsersService } from '../user/service/user.service';
+import { User } from 'src/user/model/user.model';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
