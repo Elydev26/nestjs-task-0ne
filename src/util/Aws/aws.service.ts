@@ -10,9 +10,9 @@ export class AwsService {
 
   constructor(private readonly configService: ConfigService) {
     this.s3 = new S3({
-      region: this.configService.get('AWS_S3_REGION'),
-      accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-      secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+      region: this.configService.get('aws_s3_region'),
+      accessKeyId: this.configService.get('aws_access_key_i'),
+      secretAccessKey: this.configService.get('aws_secret_access_key'),
 
     });
   }
@@ -21,7 +21,7 @@ export class AwsService {
     const fileKey = `${uuidv4()}-${file.originalname}`;
     const uploadResult = await this.s3
       .upload({
-        Bucket: this.configService.get('AWS_S3_BUCKET_NAME'),
+        Bucket: this.configService.get('aws_s3_bucket_name'),
         Key: fileKey,
         Body: file.buffer,
         ContentType: file.mimetype,
@@ -32,7 +32,7 @@ export class AwsService {
   
   async getFileUrl(fileKey: string): Promise<string> {
     const fileUrl = await this.s3.getSignedUrlPromise('getObject', {
-      Bucket: this.configService.get('AWS_S3_BUCKET_NAME'),
+      Bucket: this.configService.get('aws_s3_bucket_name'),
       Key: fileKey,
     });
     return fileUrl;
