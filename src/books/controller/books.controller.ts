@@ -25,7 +25,7 @@ import { Response } from 'express';
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Post('create_book')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(new ObjectValidationPipe(bookSchema))

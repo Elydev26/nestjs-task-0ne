@@ -2,9 +2,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt'
-import { UsersService } from '../user/service/user.service';
 import { User } from 'src/user/model/user.model';
 import { ConfigService } from '@nestjs/config';
+import { UsersService } from '../../user/service/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
